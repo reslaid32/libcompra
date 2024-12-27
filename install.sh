@@ -3,9 +3,9 @@
 # Exit immediately if a command exits with a non-zero status
 set -e
 
-BIN_DIR="/usr/local/bin"
+BIN_DIR="/usr/bin"
 # Target directory for the libraries
-LIB_DIR="/usr/local/lib"
+LIB_DIR="/usr/lib"
 
 # Directory containing the .so files 
 LIB_SOURCE_DIR="./build/lib"

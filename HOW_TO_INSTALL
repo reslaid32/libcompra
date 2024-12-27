@@ -9,6 +9,6 @@ $ sudo ./install.sh install -y
 
 or
 
-$ cp ./build/lib/*.so /usr/local/lib
-$ cp ./build/bin/*    /usr/local/bin
+$ cp ./build/lib/*.so /usr/lib
+$ cp ./build/bin/*    /usr/bin
 
