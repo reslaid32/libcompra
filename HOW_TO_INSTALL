@@ -1,0 +1,14 @@
+To install the library you need to build it, this can be done with the command
+
+$ make all
+
+You can install with the commands
+
+$ chmod +x install.sh
+$ sudo ./install.sh install -y
+
+or
+
+$ cp ./build/lib/*.so /usr/local/lib
+$ cp ./build/bin/*    /usr/local/bin
+
