@@ -4,11 +4,4 @@ $ make all
 
 You can install with the commands
 
-$ chmod +x install.sh
-$ sudo ./install.sh install -y
-
-or
-
-$ cp ./build/lib/*.so /usr/lib
-$ cp ./build/bin/*    /usr/bin
-
+$ sudo make DESTDIR=/usr/ install
