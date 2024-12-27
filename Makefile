@@ -83,7 +83,8 @@ install: libraries
 uninstall:
 	@echo "Uninstalling libraries, and headers..."
 	rm -f $(DESTDIR)/lib/libcompra$(LIBEXT)
-	rm -f $(DESTDIR)/include/compra/*.h
+# rm -f $(DESTDIR)/include/compra/*.h
+	rm -rf $(DESTDIR)/include/compra
 
 reinstall: uninstall install
 
