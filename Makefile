@@ -71,8 +71,7 @@ tests: $(OBJDIR) $(BINDIR)
 # 	$(CXX) $(CXXFLAGS) $(OBJDIR)/cli.o -o $(BINDIR)/cli$(APPEXT) $(LDFLAGS) -lcompra
 
 install: libraries
-	@echo "Installing binaries, libraries, and headers..."
-	mkdir -p $(DESTDIR)/bin
+	@echo "Installing libraries, and headers..."
 	mkdir -p $(DESTDIR)/lib
 	mkdir -p $(DESTDIR)/include
 
@@ -82,8 +81,7 @@ install: libraries
 	cp $(INCDIR)/compra/*.h $(DESTDIR)/include/compra/
 
 uninstall:
-	@echo "Uninstalling binaries, libraries, and headers..."
-	rm -f $(DESTDIR)/bin/unit$(APPEXT)
+	@echo "Uninstalling libraries, and headers..."
 	rm -f $(DESTDIR)/lib/libcompra$(LIBEXT)
 	rm -f $(DESTDIR)/include/compra/*.h
 
