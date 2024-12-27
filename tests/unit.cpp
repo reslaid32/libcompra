@@ -5,9 +5,9 @@ using namespace LIBCOMPRA_NAMESPACE;
 #include <test_framework.h>
 #include <exception>
 
-std::string input = "HELLA FOO BAR FOO HELLA BAR 123 321 288 228 1337 1488 HELLA PRAYERS "
-                    "HELLA FOO BAR FOO HELLA BAR 123 321 288 228 1337 1488 HELLA PRAYERS "
-                    "HELLA FOO BAR FOO HELLA BAR 123 321 288 228 1337 1488 HELLA PRAYERS";
+std::string input = "HELLO WORLD "
+                    "FOO BAR "
+                    "1337";
 
 TEST_CASE(lz77, "LZ77 Compression") {
     auto compressed = LZ77::compress(input);
