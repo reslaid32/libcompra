@@ -73,12 +73,19 @@ tests: $(OBJDIR) $(BINDIR)
 install: libraries
 	@echo "Installing libraries, and headers..."
 	mkdir -p $(DESTDIR)/lib
-	mkdir -p $(DESTDIR)/include
-
-	cp $(LIBDIR)/libcompra$(LIBEXT) $(DESTDIR)/lib/
-
 	mkdir -p $(DESTDIR)/include/compra
-	cp $(INCDIR)/compra/*.h $(DESTDIR)/include/compra/
+
+	@if [ -f $(LIBDIR)/libcompra$(LIBEXT) ]; then \
+		cp $(LIBDIR)/libcompra$(LIBEXT) $(DESTDIR)/lib/; \
+	else \
+		echo "Library not found: $(LIBDIR)/libcompra$(LIBEXT)"; \
+	fi
+
+	@if [ -d $(INCDIR)/compra ]; then \
+		cp $(INCDIR)/compra/*.h $(DESTDIR)/include/compra/; \
+	else \
+		echo "Header files not found: $(INCDIR)/compra/*.h"; \
+	fi
 
 uninstall:
 	@echo "Uninstalling libraries, and headers..."
