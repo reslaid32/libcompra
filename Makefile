@@ -3,12 +3,13 @@ OUTDIR = build
 OBJDIR = $(OUTDIR)/obj
 BINDIR = $(OUTDIR)/bin
 LIBDIR = $(OUTDIR)/lib
+INCDIR = include
+SRCDIR = src
 TESTDIR = tests
 # EXAMPLESDIR = examples
 
 # Set the compiler and flags
-# CC = clang
-CXX = clang++
+CXX = g++
 CXXFLAGS = -std=c++17 -Wall -fPIC
 LDFLAGS = -L$(LIBDIR)
 
@@ -46,7 +47,7 @@ $(LIBDIR):
 # Build libraries
 libraries: $(OBJDIR) $(LIBDIR)
 	@echo "Building compra library..."
-	$(CXX) $(CXXFLAGS) -Iinclude -c src/compra.cpp -o $(OBJDIR)/libcompra.o
+	$(CXX) $(CXXFLAGS) -I$(INCDIR) -c $(SRCDIR)/compra.cpp -o $(OBJDIR)/libcompra.o
 	$(CXX) -shared $(OBJDIR)/libcompra.o -o $(LIBDIR)/libcompra$(LIBEXT)
 
 # Build tests
@@ -57,7 +58,7 @@ tests: $(OBJDIR) $(BINDIR)
 	$(CXX) $(CXXFLAGS) -c $(TESTDIR)/framework/test_framework.cpp -o $(OBJDIR)/unit.test_framework.o
 
 	@echo "Building test executable..."
-	$(CXX) $(CXXFLAGS) -Iinclude -I$(TESTDIR)/framework -c $(TESTDIR)/unit.cpp -o $(OBJDIR)/unit.o
+	$(CXX) $(CXXFLAGS) -I$(INCDIR) -I$(TESTDIR)/framework -c $(TESTDIR)/unit.cpp -o $(OBJDIR)/unit.o
 
 	$(CXX) $(CXXFLAGS) $(OBJDIR)/unit.o $(OBJDIR)/unit.test_framework.o -o $(BINDIR)/unit$(APPEXT) $(LDFLAGS) -lcompra
 
@@ -65,9 +66,28 @@ tests: $(OBJDIR) $(BINDIR)
 # examples: $(EXAMPLESDIR) $(BINDIR)
 # 	@echo "Building examples..."
 
-# 	$(CXX) $(CXXFLAGS) -Iinclude -c $(EXAMPLESDIR)/cli.cpp -o $(OBJDIR)/cli.o
+# 	$(CXX) $(CXXFLAGS) -I$(INCDIR) -c $(EXAMPLESDIR)/cli.cpp -o $(OBJDIR)/cli.o
 
 # 	$(CXX) $(CXXFLAGS) $(OBJDIR)/cli.o -o $(BINDIR)/cli$(APPEXT) $(LDFLAGS) -lcompra
+
+install: libraries
+	@echo "Installing binaries, libraries, and headers..."
+	mkdir -p $(DESTDIR)/bin
+	mkdir -p $(DESTDIR)/lib
+	mkdir -p $(DESTDIR)/include
+
+	cp $(LIBDIR)/libcompra$(LIBEXT) $(DESTDIR)/lib/
+
+	mkdir -p $(DESTDIR)/include/compra
+	cp $(INCDIR)/compra/*.h $(DESTDIR)/include/compra/
+
+uninstall:
+	@echo "Uninstalling binaries, libraries, and headers..."
+	rm -f $(DESTDIR)/bin/unit$(APPEXT)
+	rm -f $(DESTDIR)/lib/libcompra$(LIBEXT)
+	rm -f $(DESTDIR)/include/compra/*.h
+
+reinstall: uninstall install
 
 # Clean up files
 clean-objs:
@@ -83,4 +103,4 @@ clean-all: clean-objs clean-bins clean-libs
 
 clean: clean-all
 
-.PHONY: all only-lib only-test libraries tests clean-objs clean-bins clean-libs clean-all clean
+.PHONY: all only-lib only-test libraries tests clean-objs clean-bins clean-libs clean-all clean install uninstall reinstall
