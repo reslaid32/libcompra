@@ -144,6 +144,45 @@ namespace LZ78 {
 
         return output;
     }
+
+    namespace Utils {
+        LIBCOMPRA_API std::string serializeToken(const Token& token) {
+            return std::to_string(token.index) + "," + std::to_string(token.next);
+        }
+
+        LIBCOMPRA_API std::string vectorToString(const std::vector<Token>& tokens) {
+            std::string result;
+            for (const auto& token : tokens) {
+                result += serializeToken(token) + ";";
+            }
+            if (!result.empty()) {
+                result.pop_back();
+            }
+            return result;
+        }
+
+        LIBCOMPRA_API Token deserializeToken(const std::string& str) {
+            size_t firstComma = str.find(',');
+            size_t secondComma = str.find(',', firstComma + 1);
+            size_t index = std::stoull(str.substr(0, firstComma));
+            char next = str[secondComma + 1];
+            return {index, next};
+        }
+
+        LIBCOMPRA_API std::vector<Token> stringToVector(const std::string& str) {
+            std::vector<Token> tokens;
+            size_t start = 0;
+            size_t end;
+            while ((end = str.find(';', start)) != std::string::npos) {
+                tokens.push_back(deserializeToken(str.substr(start, end - start)));
+                start = end + 1;
+            }
+            if (start < str.size()) {
+                tokens.push_back(deserializeToken(str.substr(start)));
+            }
+            return tokens;
+        }
+    }
 }
 
 namespace LZMA {
@@ -203,6 +242,52 @@ namespace LZMA {
         }
 
         return output;
+    }
+
+    namespace Utils {
+        LIBCOMPRA_API std::string serializeToken(const Token& token) {
+            return std::to_string(token.position) + "," + std::to_string(token.length) + "," + token.next;
+        }
+
+        LIBCOMPRA_API std::string vectorToString(const std::vector<Token>& tokens) {
+            std::string result;
+            for (const auto& token : tokens) {
+                result += serializeToken(token) + ";";
+            }
+            if (!result.empty()) {
+                result.pop_back();
+            }
+            return result;
+        }
+
+        LIBCOMPRA_API Token deserializeToken(const std::string& str) {
+            size_t firstComma = str.find(',');
+            size_t secondComma = str.find(',', firstComma + 1);
+            size_t thirdComma = str.find(',', secondComma + 1);
+            
+            size_t position = std::stoull(str.substr(0, firstComma));
+            size_t length = std::stoull(str.substr(firstComma + 1, secondComma - firstComma - 1));
+            char next = str[thirdComma + 1];
+            
+            return {position, length, next};
+        }
+
+        LIBCOMPRA_API std::vector<Token> stringToVector(const std::string& str) {
+            std::vector<Token> tokens;
+            size_t start = 0;
+            size_t end;
+            
+            while ((end = str.find(';', start)) != std::string::npos) {
+                tokens.push_back(deserializeToken(str.substr(start, end - start)));
+                start = end + 1;
+            }
+            
+            if (start < str.size()) {
+                tokens.push_back(deserializeToken(str.substr(start)));
+            }
+            
+            return tokens;
+        }
     }
 }
 
@@ -603,6 +688,52 @@ namespace LZ5 {
 
         return output;
     }
+
+    namespace Utils {
+        LIBCOMPRA_API std::string serializeToken(const Token& token) {
+            return std::to_string(token.offset) + "," + std::to_string(token.length) + "," + token.next;
+        }
+
+        LIBCOMPRA_API std::string vectorToString(const std::vector<Token>& tokens) {
+            std::string result;
+            for (const auto& token : tokens) {
+                result += serializeToken(token) + ";";
+            }
+            if (!result.empty()) {
+                result.pop_back();
+            }
+            return result;
+        }
+
+        LIBCOMPRA_API Token deserializeToken(const std::string& str) {
+            size_t firstComma = str.find(',');
+            size_t secondComma = str.find(',', firstComma + 1);
+            size_t thirdComma = str.find(',', secondComma + 1);
+
+            size_t offset = std::stoull(str.substr(0, firstComma));
+            size_t length = std::stoull(str.substr(firstComma + 1, secondComma - firstComma - 1));
+            char next = (thirdComma != std::string::npos) ? str[thirdComma + 1] : '\0'; 
+
+            return {offset, length, next};
+        }
+
+        LIBCOMPRA_API std::vector<Token> stringToVector(const std::string& str) {
+            std::vector<Token> tokens;
+            size_t start = 0;
+            size_t end;
+
+            while ((end = str.find(';', start)) != std::string::npos) {
+                tokens.push_back(deserializeToken(str.substr(start, end - start)));
+                start = end + 1;
+            }
+
+            if (start < str.size()) {
+                tokens.push_back(deserializeToken(str.substr(start)));
+            }
+
+            return tokens;
+        }
+    }
 }
 
 namespace LZW {
@@ -789,6 +920,54 @@ namespace LZO {
 
         return output;
     }
+
+    namespace Utils {
+        LIBCOMPRA_API std::string serializeToken(const Token& token) {
+            return std::to_string(token.offset) + "," + std::to_string(token.length) + "," + (token.next == '\0' ? "\\0" : std::string(1, token.next));
+        }
+
+        LIBCOMPRA_API std::string vectorToString(const std::vector<Token>& tokens) {
+            std::string result;
+            for (const auto& token : tokens) {
+                result += serializeToken(token) + ";";
+            }
+            if (!result.empty()) {
+                result.pop_back();
+            }
+            return result;
+        }
+
+        LIBCOMPRA_API Token deserializeToken(const std::string& str) {
+            size_t firstComma = str.find(',');
+            size_t secondComma = str.find(',', firstComma + 1);
+            size_t thirdComma = str.find(',', secondComma + 1);
+
+            size_t offset = std::stoull(str.substr(0, firstComma));
+            size_t length = std::stoull(str.substr(firstComma + 1, secondComma - firstComma - 1));
+
+            std::string nextStr = str.substr(thirdComma + 1);
+            char next = (nextStr == "\\0") ? '\0' : nextStr[0];
+
+            return {offset, length, next};
+        }
+
+        LIBCOMPRA_API std::vector<Token> stringToVector(const std::string& str) {
+            std::vector<Token> tokens;
+            size_t start = 0;
+            size_t end;
+
+            while ((end = str.find(';', start)) != std::string::npos) {
+                tokens.push_back(deserializeToken(str.substr(start, end - start)));
+                start = end + 1;
+            }
+
+            if (start < str.size()) {
+                tokens.push_back(deserializeToken(str.substr(start)));
+            }
+
+            return tokens;
+        }
+    }
 }
 
 namespace LZSS {
@@ -852,6 +1031,58 @@ namespace LZSS {
         }
 
         return output;
+    }
+
+    namespace Utils {
+        LIBCOMPRA_API std::string serializeToken(const Token& token) {
+            if (token.isLiteral) {
+                return std::to_string(token.isLiteral) + "," + std::string(1, token.literal) + ",0,0";
+            } else {
+                return std::to_string(token.isLiteral) + ",\0," + std::to_string(token.offset) + "," + std::to_string(token.length);
+            }
+        }
+
+        LIBCOMPRA_API std::string vectorToString(const std::vector<Token>& tokens) {
+            std::string result;
+            for (const auto& token : tokens) {
+                result += serializeToken(token) + ";";
+            }
+            if (!result.empty()) {
+                result.pop_back();
+            }
+            return result;
+        }
+
+        LIBCOMPRA_API Token deserializeToken(const std::string& str) {
+            size_t firstComma = str.find(',');
+            size_t secondComma = str.find(',', firstComma + 1);
+            size_t thirdComma = str.find(',', secondComma + 1);
+            size_t fourthComma = str.find(',', thirdComma + 1);
+
+            bool isLiteral = std::stoi(str.substr(0, firstComma));
+            char literal = str[secondComma + 1];
+            size_t offset = std::stoull(str.substr(thirdComma + 1, fourthComma - thirdComma - 1));
+            size_t length = std::stoull(str.substr(fourthComma + 1));
+
+            return {isLiteral, literal, offset, length};
+        }
+
+        LIBCOMPRA_API std::vector<Token> stringToVector(const std::string& str) {
+            std::vector<Token> tokens;
+            size_t start = 0;
+            size_t end;
+
+            while ((end = str.find(';', start)) != std::string::npos) {
+                tokens.push_back(deserializeToken(str.substr(start, end - start)));
+                start = end + 1;
+            }
+
+            if (start < str.size()) {
+                tokens.push_back(deserializeToken(str.substr(start)));
+            }
+
+            return tokens;
+        }
     }
 }
 

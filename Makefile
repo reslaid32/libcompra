@@ -10,7 +10,7 @@ TESTDIR = tests
 # CC = clang
 CXX = clang++
 CXXFLAGS = -std=c++17 -Wall -fPIC
-LDFLAGS = -L$(BINDIR)
+LDFLAGS = -L$(LIBDIR)
 
 ifeq ($(shell uname), Linux)
   LIBEXT = .so
@@ -62,8 +62,12 @@ tests: $(OBJDIR) $(BINDIR)
 	$(CXX) $(CXXFLAGS) $(OBJDIR)/unit.o $(OBJDIR)/unit.test_framework.o -o $(BINDIR)/unit$(APPEXT) $(LDFLAGS) -lcompra
 
 # Build examples
-# examples: $(OBJDIR) $(BINDIR)
+# examples: $(EXAMPLESDIR) $(BINDIR)
 # 	@echo "Building examples..."
+
+# 	$(CXX) $(CXXFLAGS) -Iinclude -c $(EXAMPLESDIR)/cli.cpp -o $(OBJDIR)/cli.o
+
+# 	$(CXX) $(CXXFLAGS) $(OBJDIR)/cli.o -o $(BINDIR)/cli$(APPEXT) $(LDFLAGS) -lcompra
 
 # Clean up files
 clean-objs:

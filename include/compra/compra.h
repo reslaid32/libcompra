@@ -49,6 +49,16 @@ namespace LZ78 {
     LIBCOMPRA_API std::vector<Token> compress(const std::string& input);
 
     LIBCOMPRA_API std::string decompress(const std::vector<Token>& tokens);
+
+    namespace Utils {
+        LIBCOMPRA_API std::string serializeToken(const Token& token);
+
+        LIBCOMPRA_API std::string vectorToString(const std::vector<Token>& tokens);
+
+        LIBCOMPRA_API Token deserializeToken(const std::string& str);
+
+        LIBCOMPRA_API std::vector<Token> stringToVector(const std::string& str);
+    }
 }
 
 namespace LZMA {
@@ -63,6 +73,16 @@ namespace LZMA {
     LIBCOMPRA_API std::vector<Token> compress(const std::string& input, size_t dictionarySize = 4096);
 
     LIBCOMPRA_API std::string decompress(const std::vector<Token>& tokens, size_t dictionarySize = 4096);
+
+    namespace Utils {
+        LIBCOMPRA_API std::string serializeToken(const Token& token);
+
+        LIBCOMPRA_API std::string vectorToString(const std::vector<Token>& tokens);
+
+        LIBCOMPRA_API Token deserializeToken(const std::string& str);
+
+        LIBCOMPRA_API std::vector<Token> stringToVector(const std::string& str);
+    }
 }
 
 namespace Huffman {
@@ -156,6 +176,16 @@ namespace LZ5 {
     LIBCOMPRA_API std::vector<Token> compress(const std::string& input, size_t maxOffset = 32 * 1024);
 
     LIBCOMPRA_API std::string decompress(const std::vector<Token>& tokens);
+
+    namespace Utils {
+        LIBCOMPRA_API std::string serializeToken(const Token& token);
+
+        LIBCOMPRA_API std::string vectorToString(const std::vector<Token>& tokens);
+
+        LIBCOMPRA_API Token deserializeToken(const std::string& str);
+
+        LIBCOMPRA_API std::vector<Token> stringToVector(const std::string& str);
+    }
 }
 
 namespace LZW {
@@ -188,6 +218,16 @@ namespace LZO {
     LIBCOMPRA_API std::vector<Token> compress(const std::string& input, size_t windowSize = 8 * 1024);
 
     LIBCOMPRA_API std::string decompress(const std::vector<Token>& tokens);
+
+    namespace Utils {
+        LIBCOMPRA_API std::string serializeToken(const Token& token);
+
+        LIBCOMPRA_API std::string vectorToString(const std::vector<Token>& tokens);
+
+        LIBCOMPRA_API Token deserializeToken(const std::string& str);
+
+        LIBCOMPRA_API std::vector<Token> stringToVector(const std::string& str);
+    }
 }
 
 namespace LZSS {
@@ -205,6 +245,16 @@ namespace LZSS {
     LIBCOMPRA_API std::vector<Token> compress(const std::string& input, size_t windowSize = 4 * 1024, size_t lookaheadSize = 18);
 
     LIBCOMPRA_API std::string decompress(const std::vector<Token>& tokens);
+
+    namespace Utils {
+        LIBCOMPRA_API std::string serializeToken(const Token& token);
+
+        LIBCOMPRA_API std::string vectorToString(const std::vector<Token>& tokens);
+
+        LIBCOMPRA_API Token deserializeToken(const std::string& str);
+
+        LIBCOMPRA_API std::vector<Token> stringToVector(const std::string& str);
+    }
 }
 
 namespace FSE {
